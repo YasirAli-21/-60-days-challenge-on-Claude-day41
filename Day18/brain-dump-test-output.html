@@ -1,0 +1,498 @@
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f1f5f9;
+    --surface: #ffffff;
+    --surface-alt: #f8fafc;
+    --border: #e2e8f0;
+    --accent: #6366f1;
+    --accent-light: #eef2ff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --orange: #f97316;
+    --orange-bg: #fff7ed;
+    --green: #22c55e;
+    --green-bg: #f0fdf4;
+    --yellow: #eab308;
+    --yellow-bg: #fefce8;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-badge: 20px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .header-icon {
+    width: 44px; height: 44px;
+    background: var(--accent-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .header-text h1 {
+    font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;
+  }
+  .header-meta {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px;
+  }
+  .mode-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--accent-light); color: var(--accent);
+    padding: 3px 10px; border-radius: var(--radius-badge);
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .stat-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--surface-alt); border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 3px 10px; border-radius: var(--radius-badge);
+    font-size: 11px; font-weight: 500;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.15s ease;
+  }
+  .card:hover { box-shadow: var(--shadow); }
+  .card.full { grid-column: 1 / -1; }
+  .card.accent-top { border-top: 3px solid var(--accent); }
+  .card.red-top { border-top: 3px solid var(--red); }
+  .card.yellow-top { border-top: 3px solid var(--yellow); }
+
+  .section-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .section-label .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%; background: var(--accent);
+  }
+  .section-label .dot-red { background: var(--red); }
+  .section-label .dot-yellow { background: var(--yellow); }
+
+  .card-title {
+    font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;
+  }
+  .card-body {
+    font-size: 13px; color: var(--text-secondary); line-height: 1.65;
+  }
+
+  /* Badge */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: var(--radius-badge);
+    font-size: 11px; font-weight: 600;
+  }
+  .badge-high { background: var(--red-bg); color: var(--red); }
+  .badge-medium { background: var(--orange-bg); color: var(--orange); }
+  .badge-low { background: var(--green-bg); color: var(--green); }
+  .badge-conflict { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-question { background: var(--blue-bg); color: var(--blue); }
+  .badge-pending { background: var(--surface-alt); color: var(--text-secondary); border: 1px solid var(--border); }
+  .badge-done { background: var(--green-bg); color: var(--green); }
+
+  /* Summary */
+  .summary-text {
+    font-size: 14px; color: var(--text-primary); line-height: 1.75;
+  }
+
+  /* Takeaway cards */
+  .takeaway-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px;
+  }
+  .takeaway-card {
+    background: var(--surface-alt); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px;
+    transition: border-color 0.15s;
+  }
+  .takeaway-card:hover { border-color: var(--accent); }
+  .takeaway-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .takeaway-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .takeaway-body { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* Action items table */
+  .table-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--surface-alt); }
+  thead th {
+    padding: 10px 14px; text-align: left;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface-alt); }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  tbody tr:nth-child(even):hover { background: var(--surface-alt); }
+  td { padding: 11px 14px; font-size: 13px; color: var(--text-primary); vertical-align: middle; }
+  td.task { font-weight: 500; }
+  td.owner { color: var(--text-secondary); }
+  td.deadline { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  td.not-specified { color: var(--text-muted); font-style: italic; }
+
+  /* Open questions / risks */
+  .item-list { display: flex; flex-direction: column; gap: 8px; }
+  .item-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px;
+    background: var(--surface-alt); border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .item-row-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .item-row-text { font-size: 13px; color: var(--text-primary); line-height: 1.5; }
+
+  /* Risk cards */
+  .risk-card {
+    background: var(--orange-bg); border: 1px solid #fed7aa;
+    border-radius: var(--radius-sm); padding: 12px 14px;
+    display: flex; gap: 10px;
+  }
+  .risk-icon { font-size: 15px; flex-shrink: 0; }
+  .risk-text { font-size: 13px; color: #9a3412; line-height: 1.5; }
+  .risk-title { font-weight: 600; margin-bottom: 2px; color: #7c2d12; }
+
+  /* Conflict cards */
+  .conflict-card {
+    background: var(--yellow-bg); border: 1px solid #fde68a;
+    border-radius: var(--radius-sm); padding: 12px 14px;
+    display: flex; gap: 10px;
+  }
+  .conflict-icon { font-size: 15px; flex-shrink: 0; }
+  .conflict-text { font-size: 13px; color: #92400e; line-height: 1.5; }
+  .conflict-title { font-weight: 600; margin-bottom: 4px; }
+  .conflict-sides { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+  .conflict-side {
+    background: rgba(255,255,255,0.6); border-radius: 6px;
+    padding: 4px 8px; font-size: 12px;
+  }
+
+  /* Collapsible */
+  details > summary {
+    cursor: pointer; list-style: none;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 0;
+    font-size: 13px; font-weight: 500; color: var(--text-secondary);
+    user-select: none;
+  }
+  details > summary::after { content: '▾'; font-size: 11px; }
+  details[open] > summary::after { content: '▴'; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] > *:not(summary) { margin-top: 12px; }
+
+  /* No-data state */
+  .empty-state {
+    text-align: center; padding: 20px;
+    color: var(--text-muted); font-size: 13px;
+    background: var(--surface-alt); border-radius: var(--radius-sm);
+    border: 1px dashed var(--border);
+  }
+
+  /* Notes */
+  .notes-content {
+    font-size: 13px; color: var(--text-secondary); line-height: 1.7;
+  }
+  .notes-content ul { padding-left: 18px; }
+  .notes-content li { margin-bottom: 4px; }
+
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .header { flex-direction: column; }
+    .takeaway-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-icon">🧠</div>
+  <div class="header-text">
+    <h1>Startup Planning Brain Dump</h1>
+    <div class="card-body" style="margin-top:2px;">Product launch planning session notes</div>
+    <div class="header-meta">
+      <span class="mode-badge">📋 Full Breakdown</span>
+      <span class="stat-pill">9 Action Items</span>
+      <span class="stat-pill">4 Open Questions</span>
+      <span class="stat-pill">3 Risks</span>
+      <span class="stat-pill">2 Conflicts</span>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY + KEY TAKEAWAYS ROW -->
+<div class="card full accent-top" style="margin-bottom:16px;">
+  <div class="section-label"><span class="dot"></span>Summary</div>
+  <p class="summary-text">
+    This is a post-session brain dump from a startup product launch planning meeting. The team is targeting an MVP launch on March 15, with an investor demo required by February 28. Several critical tasks lack owners — particularly the landing page copy and legal documents — and Priya's design workload creates a potential bottleneck that may delay deliverables. Budget is constrained at $4,000 remaining.
+  </p>
+</div>
+
+<!-- KEY TAKEAWAYS -->
+<div class="card full" style="margin-bottom:16px;">
+  <div class="section-label"><span class="dot"></span>Key Takeaways</div>
+  <div class="takeaway-grid">
+    <div class="takeaway-card">
+      <div class="takeaway-header">
+        <div class="takeaway-title">MVP Launch Target</div>
+        <span class="badge badge-high">🔴 High Priority</span>
+      </div>
+      <div class="takeaway-body">Launch is set for March 15. The investor demo must happen before launch, on February 28.</div>
+    </div>
+    <div class="takeaway-card">
+      <div class="takeaway-header">
+        <div class="takeaway-title">Design Bottleneck Risk</div>
+        <span class="badge badge-high">🔴 High Priority</span>
+      </div>
+      <div class="takeaway-body">Priya is handling design but is swamped until February 20 — her availability may delay design-dependent deliverables ahead of the February 28 demo.</div>
+    </div>
+    <div class="takeaway-card">
+      <div class="takeaway-header">
+        <div class="takeaway-title">Pricing Undecided</div>
+        <span class="badge badge-question">❓ Open Question</span>
+      </div>
+      <div class="takeaway-body">Two options on the table: $29/mo or $49/mo. No decision made yet.</div>
+    </div>
+    <div class="takeaway-card">
+      <div class="takeaway-header">
+        <div class="takeaway-title">Unowned Tasks</div>
+        <span class="badge badge-conflict">⚠️ Conflict</span>
+      </div>
+      <div class="takeaway-body">Landing page copy and legal documents (terms of service, privacy policy) have no claimed owner. Launch checklist has not been started.</div>
+    </div>
+    <div class="takeaway-card">
+      <div class="takeaway-header">
+        <div class="takeaway-title">Budget Constraint</div>
+        <span class="badge badge-medium">🟠 Medium Priority</span>
+      </div>
+      <div class="takeaway-body">$4,000 remaining. Ads budget is uncertain — the team is unsure whether to run ads and has not allocated a budget for them.</div>
+    </div>
+    <div class="takeaway-card">
+      <div class="takeaway-header">
+        <div class="takeaway-title">Stripe Setup Dependency</div>
+        <span class="badge badge-medium">🟠 Medium Priority</span>
+      </div>
+      <div class="takeaway-body">Arjun can set up Stripe, but it is conditional on API docs being ready. This is a blocking dependency.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ACTION ITEMS -->
+<div class="card full red-top" style="margin-bottom:16px;">
+  <div class="section-label"><span class="dot dot-red"></span>Action Items</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Owner</th>
+          <th>Deadline</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="task">Finalize MVP backend</td>
+          <td class="owner">Arjun</td>
+          <td class="deadline">March 15</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+        </tr>
+        <tr>
+          <td class="task">Complete product design</td>
+          <td class="owner">Priya</td>
+          <td class="deadline">Before Feb 28 demo</td>
+          <td><span class="badge badge-high">🔴 High Priority</span></td>
+        </tr>
+        <tr>
+          <td class="task">Finalize pricing — decide between $29/mo or $49/mo</td>
+          <td class="not-specified">Not specified</td>
+          <td class="not-specified">Not specified</td>
+          <td><span class="badge badge-question">❓ Open Question</span></td>
+        </tr>
+        <tr>
+          <td class="task">Write landing page copy</td>
+          <td class="not-specified">Not specified</td>
+          <td class="not-specified">Not specified</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+        </tr>
+        <tr>
+          <td class="task">Set up Stripe (conditional on API docs being ready)</td>
+          <td class="owner">Arjun</td>
+          <td class="not-specified">Not specified</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+        </tr>
+        <tr>
+          <td class="task">Prepare investor demo</td>
+          <td class="not-specified">Not specified</td>
+          <td class="deadline">Feb 28</td>
+          <td><span class="badge badge-high">🔴 High Priority</span></td>
+        </tr>
+        <tr>
+          <td class="task">Draft terms of service and privacy policy</td>
+          <td class="not-specified">Not specified</td>
+          <td class="not-specified">Not specified</td>
+          <td><span class="badge badge-question">❓ Open Question</span></td>
+        </tr>
+        <tr>
+          <td class="task">Set up email list and create social media posts for marketing</td>
+          <td class="not-specified">Not specified</td>
+          <td class="not-specified">Not specified</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+        </tr>
+        <tr>
+          <td class="task">Start launch checklist</td>
+          <td class="not-specified">Not specified</td>
+          <td class="not-specified">Not specified</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- OPEN QUESTIONS + RISKS ROW -->
+<div class="grid-2" style="margin-bottom:16px;">
+  <div class="card">
+    <div class="section-label"><span class="dot" style="background:var(--blue)"></span>Open Questions</div>
+    <div class="item-list">
+      <div class="item-row">
+        <div class="item-row-icon">❓</div>
+        <div class="item-row-text">What is the final pricing — $29/mo or $49/mo?</div>
+      </div>
+      <div class="item-row">
+        <div class="item-row-icon">❓</div>
+        <div class="item-row-text">Who will write the landing page copy?</div>
+      </div>
+      <div class="item-row">
+        <div class="item-row-icon">❓</div>
+        <div class="item-row-text">Who will handle terms of service and privacy policy (legal)?</div>
+      </div>
+      <div class="item-row">
+        <div class="item-row-icon">❓</div>
+        <div class="item-row-text">Will ads be part of the marketing plan? If so, what is the ads budget?</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label"><span class="dot dot-red"></span>Risks / Blockers</div>
+    <div class="item-list">
+      <div class="risk-card">
+        <div class="risk-icon">🚧</div>
+        <div class="risk-text">
+          <div class="risk-title">Design bottleneck</div>
+          Priya is swamped until February 20. Designs may be late, potentially impacting the February 28 investor demo.
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon">🚧</div>
+        <div class="risk-text">
+          <div class="risk-title">Stripe setup dependency</div>
+          Arjun's ability to set up Stripe depends on API docs being ready. API doc readiness is not confirmed.
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon">🚧</div>
+        <div class="risk-text">
+          <div class="risk-title">Mobile version may be delayed</div>
+          Priya mentioned the mobile version might need to be delayed. No decision or timeline given.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFLICTS -->
+<div class="card full yellow-top" style="margin-bottom:16px;">
+  <div class="section-label"><span class="dot dot-yellow"></span>Conflicts</div>
+  <div class="item-list">
+    <div class="conflict-card">
+      <div class="conflict-icon">⚠️</div>
+      <div class="conflict-text">
+        <div class="conflict-title">Investor demo vs. Priya's availability</div>
+        The investor demo is required by February 28, but Priya is unavailable (swamped) until February 20. This leaves a very narrow 8-day window for design work ahead of the demo.
+        <div class="conflict-sides">
+          <div class="conflict-side">📅 Demo deadline: February 28</div>
+          <div class="conflict-side">🔒 Priya free from: February 20</div>
+        </div>
+      </div>
+    </div>
+    <div class="conflict-card">
+      <div class="conflict-icon">⚠️</div>
+      <div class="conflict-text">
+        <div class="conflict-title">Multiple critical tasks with no owner</div>
+        Landing page copy, legal documents (ToS + privacy policy), investor demo prep, and launch checklist all appear in the notes without an assigned owner. Responsibility is unresolved.
+        <div class="conflict-sides">
+          <div class="conflict-side">📋 Tasks requiring owner assignment: landing page copy, ToS, privacy policy, investor demo, launch checklist</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADDITIONAL NOTES -->
+<div class="card full" style="margin-bottom:16px;">
+  <details open>
+    <summary>
+      <div class="section-label" style="margin-bottom:0;"><span class="dot" style="background:var(--text-muted)"></span>Additional Notes</div>
+    </summary>
+    <div class="notes-content">
+      <ul>
+        <li>Remaining budget: <strong>$4,000</strong></li>
+        <li>Marketing plan includes: social posts, email list setup, and possibly ads (ads budget not determined)</li>
+        <li>Mobile version of the product may be delayed — mentioned by Priya, no resolution noted</li>
+        <li>Launch checklist has not been started</li>
+        <li>Arjun is handling backend; Priya is handling design</li>
+      </ul>
+    </div>
+  </details>
+</div>
